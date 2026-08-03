@@ -48,12 +48,11 @@ def play_quiz(state):
         print("등록된 퀴즈가 없어 게임을 시작할 수 없습니다.")
         return None
 
-    name = input("이름을 입력하세요: ").strip() or "UNKNOWN"
     question_count = min(QUIZ_COUNT, len(quizzes))
     selected_quizzes = random.sample(quizzes, question_count)
     score = 0
 
-    print(f"\n{name}님의 퀴즈를 시작합니다. 총 {question_count}문제입니다.\n")
+    print(f"\n퀴즈를 시작합니다. 총 {question_count}문제입니다.\n")
 
     for index, quiz in enumerate(selected_quizzes, start=1):
         if "choices" in quiz and "answer_index" in quiz:
@@ -67,7 +66,8 @@ def play_quiz(state):
         else:
             print(f"오답입니다. 정답: {correct_text}\n")
 
+    print(f"최종 점수: {score} / {question_count}")
+    name = input("랭킹에 등록할 이름을 입력하세요: ").strip() or "UNKNOWN"
     entry = add_record(state, name, score)
-    print(f"{name}님의 최종 점수: {score} / {question_count}")
     print(f"플레이 기록이 저장되었습니다. ({entry['time']})")
     return entry
