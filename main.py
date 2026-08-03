@@ -13,8 +13,6 @@ from game import (
     print_record_menu,
     save_state,
 )
-
-
 def handle_quiz_management(state):
     changed = False
 
@@ -25,9 +23,13 @@ def handle_quiz_management(state):
 
         if choice == "A":
             question = input("문제를 입력하세요: ").strip()
-            answer = input("정답을 입력하세요: ").strip()
+            choices = []
+            for index in range(1, 5):
+                choices.append(input(f"{index}번 보기를 입력하세요: ").strip())
+            answer_index = input("정답 번호(1~4)를 입력하세요: ").strip()
+
             try:
-                add_quiz(state, question, answer)
+                add_quiz(state, question, choices, answer_index)
                 print("퀴즈가 추가되었습니다.")
                 changed = True
             except ValueError as error:

@@ -1,3 +1,12 @@
+def _format_quiz_summary(quiz):
+    if "choices" in quiz and "answer_index" in quiz:
+        answer_number = quiz["answer_index"]
+        answer_text = quiz["choices"][answer_number - 1]
+        return f'{quiz["question"]} / 정답: {answer_number}번 ({answer_text})'
+
+    return f'{quiz["question"]} / {quiz["answer"]}'
+
+
 def print_main_menu():
     print("\n========== QUIZ ==========")
     print("1. 퀴즈 풀기")
@@ -14,7 +23,7 @@ def print_quiz_management_menu(quizzes):
         print("등록된 퀴즈가 없습니다.")
     else:
         for index, quiz in enumerate(quizzes, start=1):
-            print(f'{index}. {quiz["question"]} / {quiz["answer"]}')
+            print(f"{index}. {_format_quiz_summary(quiz)}")
 
     print("\nA. 퀴즈 추가")
     print("D. 퀴즈 삭제")
