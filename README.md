@@ -40,56 +40,34 @@ python main.py
 
 
 ## 메뉴 구성
-
-```
-========== QUIZ ==========
-1. 퀴즈 풀기
-2. 퀴즈 관리
-3. 기록
-4. 종료
-==========================
-```
+![alt text](images/메인메뉴.png)
 
 ### 1. 퀴즈 풀기
 - 이름 입력 후 시작 (빈 값이면 자동으로 `UNKNOWN` 저장)
 - 등록된 퀴즈 중 **랜덤 10개**로 출제
 - 종료 후 점수와 함께 랭킹/히스토리에 기록
 
-### 2. 퀴즈 관리
-```
-[등록된 퀴즈 목록]
-1. Python의 창시자는? / Guido van Rossum
-2. ...
+![alt text](images/퀴즈시작.png)
+![alt text](images/퀴즈종료.png)
 
-A. 퀴즈 추가
-D. 퀴즈 삭제
-0. 돌아가기
-```
+
+### 2. 퀴즈 관리
+
+![alt text](images/퀴즈목록.png)
+![alt text](images/퀴즈추가.png)
+![alt text](images/퀴즈삭제.png)
 
 ### 3. 기록
 - **전체 랭킹:** 상위 3명 표시
 - **개인 기록:** 이름 입력 → 해당 사용자 기록 전체 표시
 - **정렬 기준:** 점수 내림차순 → 최근 플레이 시간 내림차순
 
-```
-1. 전체 랭킹 (TOP 3)
-2. 개인 기록 조회
-0. 돌아가기
-```
+
+![alt text](images/전체랭킹.png)
+![alt text](images/개인기록.png)
+
 
 
 ## 데이터 구조 (state.json)
 
-```
-{
-  "quizzes": [
-    { "question": "Python의 창시자는?", "answer": "Guido van Rossum" }
-  ],
-  "rankings": [
-    { "name": "홍길동", "score": 9, "time": "2024-01-14T19:00:00" }
-  ],
-  "history": [
-    { "name": "홍길동", "score": 8, "time": "2024-01-15T14:30:00" }
-  ]
-}
-```
+![alt text](images/데이터구조.png)
