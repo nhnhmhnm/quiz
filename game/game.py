@@ -8,13 +8,37 @@ def _normalize_text(value):
     return " ".join(str(value).strip().casefold().split())
 
 
-def _is_correct(user_answer, expected_answer):
+def _is_correct_text(user_answer, expected_answer):
     expected_options = [
         _normalize_text(option)
         for option in str(expected_answer).split("|")
         if option.strip()
     ]
     return _normalize_text(user_answer) in expected_options
+
+
+def _play_multiple_choice_quiz(quiz, index, question_count):
+    print(f"[{index}/{question_count}] {quiz['question']}")
+    for choice_index, choice in enumerate(quiz["choices"], start=1):
+        print(f"{choice_index}. {choice}")
+
+    user_answer = input("정답 번호(1~4): ").strip()
+
+    try:
+        selected = int(user_answer)
+    except ValueError:
+        selected = 0
+
+    is_correct = selected == quiz["answer_index"]
+    correct_text = quiz["choices"][quiz["answer_index"] - 1]
+    return is_correct, correct_text
+
+
+def _play_short_answer_quiz(quiz, index, question_count):
+    print(f"[{index}/{question_count}] {quiz['question']}")
+    user_answer = input("정답: ").strip()
+    correct_text = quiz["answer"].split("|", 1)[0]
+    return _is_correct_text(user_answer, quiz["answer"]), correct_text
 
 
 def play_quiz(state):
@@ -32,15 +56,16 @@ def play_quiz(state):
     print(f"\n{name}님의 퀴즈를 시작합니다. 총 {question_count}문제입니다.\n")
 
     for index, quiz in enumerate(selected_quizzes, start=1):
-        print(f"[{index}/{question_count}] {quiz['question']}")
-        user_answer = input("정답: ").strip()
+        if "choices" in quiz and "answer_index" in quiz:
+            is_correct, correct_text = _play_multiple_choice_quiz(quiz, index, question_count)
+        else:
+            is_correct, correct_text = _play_short_answer_quiz(quiz, index, question_count)
 
-        if _is_correct(user_answer, quiz["answer"]):
+        if is_correct:
             score += 1
             print("정답입니다.\n")
         else:
-            expected = quiz["answer"].split("|", 1)[0]
-            print(f"오답입니다. 정답: {expected}\n")
+            print(f"오답입니다. 정답: {correct_text}\n")
 
     entry = add_record(state, name, score)
     print(f"{name}님의 최종 점수: {score} / {question_count}")
