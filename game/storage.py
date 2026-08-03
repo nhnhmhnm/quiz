@@ -13,6 +13,17 @@ def _default_state():
     }
 
 
+def _normalize_choices(choices):
+    if not isinstance(choices, list):
+        return None
+
+    normalized = [str(choice).strip() for choice in choices if str(choice).strip()]
+    if len(normalized) != 4:
+        return None
+
+    return normalized
+
+
 def _normalize_quizzes(quizzes):
     normalized = []
 
@@ -24,9 +35,30 @@ def _normalize_quizzes(quizzes):
             continue
 
         question = str(quiz.get("question", "")).strip()
-        answer = str(quiz.get("answer", "")).strip()
+        if not question:
+            continue
 
-        if question and answer:
+        choices = _normalize_choices(quiz.get("choices"))
+        answer_index = quiz.get("answer_index")
+
+        if choices is not None:
+            try:
+                answer_index = int(answer_index)
+            except (TypeError, ValueError):
+                continue
+
+            if 1 <= answer_index <= 4:
+                normalized.append(
+                    {
+                        "question": question,
+                        "choices": choices,
+                        "answer_index": answer_index,
+                    }
+                )
+            continue
+
+        answer = str(quiz.get("answer", "")).strip()
+        if answer:
             normalized.append({"question": question, "answer": answer})
 
     return normalized
@@ -62,8 +94,12 @@ def _normalize_state(state):
     if not isinstance(state, dict):
         return _default_state()
 
+    quizzes = _normalize_quizzes(state.get("quizzes", []))
+    if not quizzes:
+        quizzes = deepcopy(DEFAULT_QUIZZES)
+
     return {
-        "quizzes": _normalize_quizzes(state.get("quizzes", [])),
+        "quizzes": quizzes,
         "rankings": _normalize_records(state.get("rankings", [])),
         "history": _normalize_records(state.get("history", [])),
     }
