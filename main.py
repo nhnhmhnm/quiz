@@ -59,6 +59,14 @@ def handle_quiz_management(state):
             pause()
 
 
+def _prompt_record_name():
+    while True:
+        name = input("조회할 이름을 입력하세요: ").strip()
+        if name:
+            return name
+        print("이름은 비워둘 수 없습니다.")
+
+
 # 저장된 랭킹과 개인 기록을 조회하는 메뉴다.
 def show_records(state):
     while True:
@@ -75,9 +83,9 @@ def show_records(state):
                     print(f"{index}. {format_record(record)}")
             pause()
         elif choice == "2":
-            name = input("조회할 이름을 입력하세요: ").strip()
+            name = _prompt_record_name()
             records = get_personal_history(state, name)
-            print(f"\n[{name or 'UNKNOWN'}님의 기록]")
+            print(f"\n[{name}님의 기록]")
             if not records:
                 print("일치하는 기록이 없습니다.")
             else:
