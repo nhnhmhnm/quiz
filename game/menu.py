@@ -1,11 +1,11 @@
 # 퀴즈 목록 화면에서 문제와 정답을 한 줄로 요약해서 보여준다.
 def _format_quiz_summary(quiz):
-    if "choices" in quiz and "answer_index" in quiz:
-        answer_number = quiz["answer_index"]
-        answer_text = quiz["choices"][answer_number - 1]
-        return f'{quiz["question"]} / 정답: {answer_number}번 ({answer_text})'
+    answer_number = quiz["answer_index"]
+    answer_text = quiz["choices"][answer_number - 1]
+    return f'{quiz["question"]} / 정답: {answer_number}번 ({answer_text})'
 
-    return f'{quiz["question"]} / {quiz["answer"]}'
+    # 예전 주관식 형식은 더 이상 사용하지 않아 주석 처리했다.
+    # return f'{quiz["question"]} / {quiz["answer"]}'
 
 
 # 메인 메뉴 출력 전용 함수다.

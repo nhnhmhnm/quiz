@@ -58,11 +58,11 @@ def _normalize_quizzes(quizzes):
                         "answer_index": answer_index,
                     }
                 )
-            continue
 
-        answer = str(quiz.get("answer", "")).strip()
-        if answer:
-            normalized.append({"question": question, "answer": answer})
+        # 예전 주관식 형식은 더 이상 사용하지 않아 주석 처리했다.
+        # answer = str(quiz.get("answer", "")).strip()
+        # if answer:
+        #     normalized.append({"question": question, "answer": answer})
 
     return normalized
 
@@ -78,7 +78,7 @@ def _normalize_records(records):
         if not isinstance(record, dict):
             continue
 
-        name = str(record.get("name", "UNKNOWN")).strip() or "UNKNOWN"
+        name = str(record.get("name", "")).strip()
 
         try:
             score = int(record.get("score", 0))
@@ -86,7 +86,7 @@ def _normalize_records(records):
             score = 0
 
         played_at = str(record.get("time", "")).strip()
-        if not played_at:
+        if not name or not played_at:
             continue
 
         normalized.append({"name": name, "score": score, "time": played_at})

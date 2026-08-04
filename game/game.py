@@ -4,19 +4,18 @@ from config import QUIZ_COUNT
 from game.record import add_record
 
 
-# 대소문자와 공백 차이로 정답 판정이 흔들리지 않도록 문자열을 정리한다.
-def _normalize_text(value):
-    return " ".join(str(value).strip().casefold().split())
-
-
-# 예전 주관식 형식도 호환할 수 있게 남겨둔 정답 비교 함수다.
-def _is_correct_text(user_answer, expected_answer):
-    expected_options = [
-        _normalize_text(option)
-        for option in str(expected_answer).split("|")
-        if option.strip()
-    ]
-    return _normalize_text(user_answer) in expected_options
+# 예전 주관식 정답 비교 함수는 객관식 전용으로 바꾸면서 사용하지 않게 되었다.
+# def _normalize_text(value):
+#     return " ".join(str(value).strip().casefold().split())
+#
+#
+# def _is_correct_text(user_answer, expected_answer):
+#     expected_options = [
+#         _normalize_text(option)
+#         for option in str(expected_answer).split("|")
+#         if option.strip()
+#     ]
+#     return _normalize_text(user_answer) in expected_options
 
 
 # 객관식 문제 1개를 출력하고 정답 여부와 정답 문구를 돌려준다.
@@ -37,12 +36,12 @@ def _play_multiple_choice_quiz(quiz, index, question_count):
     return is_correct, correct_text
 
 
-# 호환성을 위해 남겨둔 주관식 플레이 함수다.
-def _play_short_answer_quiz(quiz, index, question_count):
-    print(f"[{index}/{question_count}] {quiz['question']}")
-    user_answer = input("정답: ").strip()
-    correct_text = quiz["answer"].split("|", 1)[0]
-    return _is_correct_text(user_answer, quiz["answer"]), correct_text
+# 예전 주관식 플레이 함수는 객관식 전용으로 바꾸면서 사용하지 않게 되었다.
+# def _play_short_answer_quiz(quiz, index, question_count):
+#     print(f"[{index}/{question_count}] {quiz['question']}")
+#     user_answer = input("정답: ").strip()
+#     correct_text = quiz["answer"].split("|", 1)[0]
+#     return _is_correct_text(user_answer, quiz["answer"]), correct_text
 
 
 def _prompt_player_name():
@@ -68,12 +67,7 @@ def play_quiz(state):
     print(f"\n퀴즈를 시작합니다. 총 {question_count}문제입니다.\n")
 
     for index, quiz in enumerate(selected_quizzes, start=1):
-        # 객관식
-        if "choices" in quiz and "answer_index" in quiz:
-            is_correct, correct_text = _play_multiple_choice_quiz(quiz, index, question_count)
-        # 주관식
-        # else:
-        #     is_correct, correct_text = _play_short_answer_quiz(quiz, index, question_count)
+        is_correct, correct_text = _play_multiple_choice_quiz(quiz, index, question_count)
 
         if is_correct:
             score += 1
