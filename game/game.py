@@ -57,23 +57,23 @@ def _prompt_player_name():
 def play_quiz(state):
     quizzes = state.get("quizzes", [])
 
-    if not quizzes:
-        print("등록된 퀴즈가 없어 게임을 시작할 수 없습니다.")
+    if len(quizzes) <= QUIZ_COUNT:
+        print("문제를 준비중입니다.")
         return None
 
-    # 문제가 10개보다 적더라도 에러 없이 플레이할 수 있게 최소값을 사용한다.
-    question_count = min(QUIZ_COUNT, len(quizzes))
+    question_count = QUIZ_COUNT
     selected_quizzes = random.sample(quizzes, question_count)
     score = 0
 
     print(f"\n퀴즈를 시작합니다. 총 {question_count}문제입니다.\n")
 
     for index, quiz in enumerate(selected_quizzes, start=1):
-        # 현재는 객관식 중심이지만, 예전 형식이 섞여 있어도 동작하도록 분기한다.
+        # 객관식
         if "choices" in quiz and "answer_index" in quiz:
             is_correct, correct_text = _play_multiple_choice_quiz(quiz, index, question_count)
-        else:
-            is_correct, correct_text = _play_short_answer_quiz(quiz, index, question_count)
+        # 주관식
+        # else:
+        #     is_correct, correct_text = _play_short_answer_quiz(quiz, index, question_count)
 
         if is_correct:
             score += 1
