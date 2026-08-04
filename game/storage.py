@@ -5,6 +5,7 @@ from copy import deepcopy
 from config import DEFAULT_QUIZZES, ENCODING, STATE_FILE
 
 
+# 상태 파일이 없거나 읽을 수 없을 때 사용할 기본 구조다.
 def _default_state():
     return {
         "quizzes": deepcopy(DEFAULT_QUIZZES),
@@ -13,6 +14,7 @@ def _default_state():
     }
 
 
+# 객관식 보기가 정확히 4개인지 확인하면서 공백을 정리한다.
 def _normalize_choices(choices):
     if not isinstance(choices, list):
         return None
@@ -24,6 +26,7 @@ def _normalize_choices(choices):
     return normalized
 
 
+# state.json 안의 퀴즈 데이터를 현재 프로그램 형식에 맞춰 정리한다.
 def _normalize_quizzes(quizzes):
     normalized = []
 
@@ -64,6 +67,7 @@ def _normalize_quizzes(quizzes):
     return normalized
 
 
+# 랭킹/기록 데이터도 타입과 필수 값만 남기도록 정리한다.
 def _normalize_records(records):
     normalized = []
 
@@ -90,6 +94,7 @@ def _normalize_records(records):
     return normalized
 
 
+# 파일에서 읽은 전체 상태를 정리해서 프로그램이 안전하게 사용할 수 있게 만든다.
 def _normalize_state(state):
     if not isinstance(state, dict):
         return _default_state()
@@ -105,6 +110,7 @@ def _normalize_state(state):
     }
 
 
+# 저장 파일이 있으면 불러오고, 없거나 손상됐으면 기본 상태로 시작한다.
 def load_state():
     if not os.path.exists(STATE_FILE):
         return _default_state()
@@ -117,6 +123,7 @@ def load_state():
         return _default_state()
 
 
+# 저장할 때도 한 번 더 정규화해서 잘못된 데이터가 파일에 남지 않게 한다.
 def save_state(state):
     with open(STATE_FILE, "w", encoding=ENCODING) as file:
         json.dump(_normalize_state(state), file, ensure_ascii=False, indent=2)

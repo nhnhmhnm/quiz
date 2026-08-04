@@ -1,7 +1,9 @@
+# 현재 등록된 퀴즈 목록을 그대로 반환한다.
 def list_quizzes(state):
     return state.get("quizzes", [])
 
 
+# 새 객관식 문제를 추가하기 전에 입력값이 올바른지 검사한다.
 def add_quiz(state, question, choices, answer_index):
     question = (question or "").strip()
 
@@ -32,6 +34,7 @@ def add_quiz(state, question, choices, answer_index):
     return quiz
 
 
+# 메뉴에서 보이는 번호(1부터 시작)를 실제 리스트 인덱스로 바꿔 삭제한다.
 def delete_quiz(state, index):
     quizzes = state.get("quizzes", [])
 

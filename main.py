@@ -13,6 +13,9 @@ from game import (
     print_record_menu,
     save_state,
 )
+
+
+# 퀴즈 관리 메뉴에서 문제 추가와 삭제를 반복 처리한다.
 def handle_quiz_management(state):
     changed = False
 
@@ -56,6 +59,7 @@ def handle_quiz_management(state):
             pause()
 
 
+# 저장된 랭킹과 개인 기록을 조회하는 메뉴다.
 def show_records(state):
     while True:
         print_record_menu()
@@ -87,6 +91,7 @@ def show_records(state):
             pause()
 
 
+# 프로그램 시작점으로, 메인 메뉴를 돌며 각 기능으로 분기한다.
 def main():
     state = load_state()
 
