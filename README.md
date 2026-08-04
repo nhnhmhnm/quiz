@@ -80,7 +80,6 @@ python main.py
 #### 개인 기록
 ![alt text](images/개인기록.png)
 
-
 ## 데이터 구조 (state.json)
 
 ![alt text](images/데이터구조.png)
