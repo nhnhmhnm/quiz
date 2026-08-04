@@ -45,6 +45,14 @@ def _play_short_answer_quiz(quiz, index, question_count):
     return _is_correct_text(user_answer, quiz["answer"]), correct_text
 
 
+def _prompt_player_name():
+    while True:
+        name = input("랭킹에 등록할 이름을 입력하세요: ").strip()
+        if name:
+            return name
+        print("이름은 비워둘 수 없습니다.")
+
+
 # 등록된 문제 중 일부를 랜덤으로 뽑아 게임을 진행하고 점수를 기록한다.
 def play_quiz(state):
     quizzes = state.get("quizzes", [])
@@ -74,7 +82,7 @@ def play_quiz(state):
             print(f"오답입니다. 정답: {correct_text}\n")
 
     print(f"최종 점수: {score} / {question_count}")
-    name = input("랭킹에 등록할 이름을 입력하세요: ").strip() or "UNKNOWN"
+    name = _prompt_player_name()
     entry = add_record(state, name, score)
     print(f"플레이 기록이 저장되었습니다. ({entry['time']})")
     return entry
