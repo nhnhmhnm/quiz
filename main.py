@@ -13,6 +13,7 @@ from game import (
     print_record_menu,
     save_state,
 )
+from utils import InputCancelled, prompt_input
 
 
 # 퀴즈 관리 메뉴에서 문제 추가와 삭제를 반복 처리한다.
@@ -22,14 +23,14 @@ def handle_quiz_management(state):
     while True:
         quizzes = list_quizzes(state)
         print_quiz_management_menu(quizzes)
-        choice = input("선택: ").strip().upper()
+        choice = prompt_input("선택: ").strip().upper()
 
         if choice == "A":
-            question = input("문제를 입력하세요: ").strip()
+            question = prompt_input("문제를 입력하세요: ").strip()
             choices = []
             for index in range(1, 5):
-                choices.append(input(f"{index}번 보기를 입력하세요: ").strip())
-            answer_index = input("정답 번호(1~4)를 입력하세요: ").strip()
+                choices.append(prompt_input(f"{index}번 보기를 입력하세요: ").strip())
+            answer_index = prompt_input("정답 번호(1~4)를 입력하세요: ").strip()
 
             try:
                 add_quiz(state, question, choices, answer_index)
@@ -44,7 +45,7 @@ def handle_quiz_management(state):
                 pause()
                 continue
 
-            raw_index = input("삭제할 문제 번호를 입력하세요: ").strip()
+            raw_index = prompt_input("삭제할 문제 번호를 입력하세요: ").strip()
             try:
                 deleted = delete_quiz(state, int(raw_index))
                 print(f'퀴즈를 삭제했습니다: {deleted["question"]}')
@@ -61,7 +62,7 @@ def handle_quiz_management(state):
 
 def _prompt_record_name():
     while True:
-        name = input("조회할 이름을 입력하세요: ").strip()
+        name = prompt_input("조회할 이름을 입력하세요: ").strip()
         if name:
             return name
         print("이름은 비워둘 수 없습니다.")
@@ -71,7 +72,7 @@ def _prompt_record_name():
 def show_records(state):
     while True:
         print_record_menu()
-        choice = input("선택: ").strip()
+        choice = prompt_input("선택: ").strip()
 
         if choice == "1":
             records = get_top_rankings(state)
@@ -103,26 +104,30 @@ def show_records(state):
 def main():
     state = load_state()
 
-    while True:
-        print_main_menu()
-        choice = input("선택: ").strip()
+    try:
+        while True:
+            print_main_menu()
+            choice = prompt_input("선택: ").strip()
 
-        if choice == "1":
-            if play_quiz(state):
+            if choice == "1":
+                if play_quiz(state):
+                    save_state(state)
+                pause()
+            elif choice == "2":
+                if handle_quiz_management(state):
+                    save_state(state)
+            elif choice == "3":
+                show_records(state)
+            elif choice == "4":
                 save_state(state)
-            pause()
-        elif choice == "2":
-            if handle_quiz_management(state):
-                save_state(state)
-        elif choice == "3":
-            show_records(state)
-        elif choice == "4":
-            save_state(state)
-            print("퀴즈 게임을 종료합니다.")
-            break
-        else:
-            print("지원하지 않는 메뉴입니다.")
-            pause()
+                print("퀴즈 게임을 종료합니다.")
+                break
+            else:
+                print("지원하지 않는 메뉴입니다.")
+                pause()
+    except InputCancelled:
+        save_state(state)
+        print("\n입력이 중단되어 프로그램을 종료합니다.")
 
 
 if __name__ == "__main__":

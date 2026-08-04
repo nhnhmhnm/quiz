@@ -1,6 +1,7 @@
 import random
 
 from config import QUIZ_COUNT
+from utils import prompt_input
 from game.record import add_record
 
 
@@ -20,7 +21,7 @@ from game.record import add_record
 
 def _prompt_choice_number():
     while True:
-        user_answer = input("정답 번호(1~4): ").strip()
+        user_answer = prompt_input("정답 번호(1~4): ").strip()
 
         try:
             selected = int(user_answer)
@@ -56,7 +57,7 @@ def _play_multiple_choice_quiz(quiz, index, question_count):
 
 def _prompt_player_name():
     while True:
-        name = input("랭킹에 등록할 이름을 입력하세요: ").strip()
+        name = prompt_input("랭킹에 등록할 이름을 입력하세요: ").strip()
         if name:
             return name
         print("이름은 비워둘 수 없습니다.")

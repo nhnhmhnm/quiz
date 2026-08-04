@@ -1,3 +1,6 @@
+from utils import prompt_input
+
+
 # 퀴즈 목록 화면에서 문제와 정답을 한 줄로 요약해서 보여준다.
 def _format_quiz_summary(quiz):
     answer_number = quiz["answer_index"]
@@ -42,4 +45,4 @@ def print_record_menu():
 
 # 사용자가 결과를 읽고 다음 화면으로 넘어갈 시간을 주기 위한 일시정지다.
 def pause():
-    input("\n엔터를 누르면 계속합니다...")
+    prompt_input("\n엔터를 누르면 계속합니다...")
