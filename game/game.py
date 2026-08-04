@@ -18,19 +18,29 @@ from game.record import add_record
 #     return _normalize_text(user_answer) in expected_options
 
 
+def _prompt_choice_number():
+    while True:
+        user_answer = input("정답 번호(1~4): ").strip()
+
+        try:
+            selected = int(user_answer)
+        except ValueError:
+            print("정답 번호는 1~4만 입력할 수 있습니다.")
+            continue
+
+        if 1 <= selected <= 4:
+            return selected
+
+        print("정답 번호는 1~4만 입력할 수 있습니다.")
+
+
 # 객관식 문제 1개를 출력하고 정답 여부와 정답 문구를 돌려준다.
 def _play_multiple_choice_quiz(quiz, index, question_count):
     print(f"[{index}/{question_count}] {quiz['question']}")
     for choice_index, choice in enumerate(quiz["choices"], start=1):
         print(f"{choice_index}. {choice}")
 
-    user_answer = input("정답 번호(1~4): ").strip()
-
-    try:
-        selected = int(user_answer)
-    except ValueError:
-        selected = 0
-
+    selected = _prompt_choice_number()
     is_correct = selected == quiz["answer_index"]
     correct_text = quiz["choices"][quiz["answer_index"] - 1]
     return is_correct, correct_text
